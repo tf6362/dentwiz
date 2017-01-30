@@ -1,0 +1,1 @@
+mvn archetype:generate         -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-webapp -DarchetypeVersion=1.0 -DgroupId=com.dent2med.dentwiz -DartifactId=dentwiz  -Dversion=0.0.1-SNAPSHOT 

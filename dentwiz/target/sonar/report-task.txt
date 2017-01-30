@@ -1,0 +1,5 @@
+projectKey=com.dent2med.dentwiz:dentwiz
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/com.dent2med.dentwiz:dentwiz
+ceTaskId=AVmZuQ4hkraWzujlSmpa
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVmZuQ4hkraWzujlSmpa

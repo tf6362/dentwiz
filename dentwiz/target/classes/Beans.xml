@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-init-method="init"
+          default-destroy-method="destroy">
+    <context:annotation-config/>
+    <!-- scope can be prototype to get a different instance -->
+    <bean id="helloWorld" class="com.dent2med.dentwiz.HelloWorld"   scope="singleton" init-method="init" destroy-method="destroy">
+       <property name="message" value="Hello World!"/>
+        <property name="message1" value="Hello World!"/>
+        <property name="message2" value="Hello Second World!"/>
+   </bean>
+    <bean id="beanTeamplate" abstract="true">
+         <property name="message1" value="Hello World!"/>
+         <property name="message2" value="Hello Second World!"/>
+         <property name="message3" value="Namaste India!"/>
+      </bean>
+    <bean class="com.dent2med.dentwiz.InitHelloWorld" />
+<!--    <bean id="helloIndia" class="com.dent2med.dentwiz.HelloIndia" parent="helloWorld">        -->
+    <bean id="helloIndia" class="com.dent2med.dentwiz.HelloIndia" parent="beanTeamplate">
+
+        <property name="message1" value="Hello India!"/>
+        <property name="message3" value="Namaste India!"/>
+     </bean>
+    <!--use constructor arguments for mandatory dependencies and setters for optional dependencies-->
+    <!-- Dependancy Injection Below -->
+    <!-- Definition for textEditor bean -->
+    <!-- can autowire using autowire="byName" or "byType" or "autodetect"-->
+    <bean id="textEditor" class="com.dent2med.dentwiz.TextEditor" p:textMode="ASCII" p:backupSpellChecker-ref="spellChecker">
+        <!-- comment these 2 out to throw an exception as it is annotated Required -->
+        <constructor-arg index="0" ref="spellChecker"/>
+        <constructor-arg index="1" type="int" value="2"/>
+
+        <property name="spellChecker" ref="spellChecker"/>
+        <property name="email"><null/></property>
+        <property name="thirdSpellChecker">
+                <bean id="spellChecker" class="com.dent2med.dentwiz.SpellChecker"/>
+              </property>
+
+    </bean>
+    <bean id="javaCollection" class="com.dent2med.dentwiz.JavaCollection">
+
+         <!-- results in a setAddressList(java.util.List) call -->
+         <property name="addressList">
+            <list>
+               <value>INDIA</value>
+               <value>Pakistan</value>
+               <value>USA</value>
+               <value>USA</value>
+            </list>
+         </property>
+
+         <!-- results in a setAddressSet(java.util.Set) call -->
+         <property name="addressSet">
+            <set>
+               <value>INDIA</value>
+               <value>Pakistan</value>
+               <value>USA</value>
+               <value>USA</value>
+           </set>
+         </property>
+
+         <!-- results in a setAddressMap(java.util.Map) call -->
+         <property name="addressMap">
+            <map>
+               <entry key="1" value="INDIA"/>
+               <entry key="2" value="Pakistan"/>
+               <entry key="3" value="USA"/>
+               <entry key="4" value="USA"/>
+            </map>
+         </property>
+
+         <!-- results in a setAddressProp(java.util.Properties) call -->
+         <property name="addressProp">
+            <props>
+               <prop key="one">INDIA</prop>
+               <prop key="two">Pakistan</prop>
+               <prop key="three">USA</prop>
+               <prop key="four">USA</prop>
+            </props>
+         </property>
+
+      </bean>
+    <!-- Definition for spellChecker bean -->
+    <bean id="spellChecker" class="com.dent2med.dentwiz.SpellChecker">
+    </bean>
+    <bean id="cStartEventHandler"
+            class="com.dent2med.dentwiz.CStartEventHandler"/>
+
+      <bean id="cStopEventHandler"
+            class="com.dent2med.dentwiz.CStopEventHandler"/>
+    <bean id="customEventHandler"
+       class="com.dent2med.dentwiz.CustomEventHandler"/>
+
+    <bean id="customEventPublisher"
+       class="com.dent2med.dentwiz.CustomEventPublisher"/>
+
+
+    <!--Aspect Oriented Programming breaking down logic into cross cutting concerns -->
+     <!-- logging auditing, declaritive transactions, security, caching -->
+      <!-- like a class in OOP AOP uses an Aspect -->
+    <!-- join point - where you can plugin an AOP Aspect -->
+    <!-- Advice action to be taken -->
+    <!-- Introduction add new methods to existing classes-->
+    <!-- Target object proxied object being advised -->
+    <!-- Weaving linking aspects with other applications or types t compile time, load time or runtime -->
+    <!-- types before, after, after-returning, after-throwing, around (beofre and after) -->
+    <bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+       <property name="url" value="jdbc:mysql://localhost:3306/MD"/>
+       <property name="username" value="root"/>
+       <property name="password" value="myl0c4l!"/>
+    </bean>
+
+    <!-- Definition for studentJDBCTemplate bean -->
+  <!--
+     <bean id="studentJDBCTemplate"
+        class="com.dent2med.dentwiz.StudentJDBCTemplate">
+        <property name="dataSource"  ref="dataSource" />
+     </bean>
+  -->
+    <!-- Initialization for TransactionManager -->
+       <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+          <property name="dataSource"  ref="dataSource" />
+       </bean>
+
+       <!-- Definition for studentJDBCTemplate bean -->
+       <bean id="studentJDBCTemplate"
+          class="com.dent2med.dentwiz.StudentJDBCTemplate">
+          <property name="dataSource"  ref="dataSource" />
+          <property name="transactionManager"  ref="transactionManager" />
+       </bean>
+    <bean id="hubPracticeJDBCTemplate"
+              class="com.dent2med.datahub.HubPracticeJDBCTemplate">
+              <property name="dataSource"  ref="dataSource" />
+              <property name="transactionManager"  ref="transactionManager" />
+           </bean>
+
+</beans>

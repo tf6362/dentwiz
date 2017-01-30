@@ -1,0 +1,1 @@
+set JAVA_HOME=C:\jdk-8u92_32
